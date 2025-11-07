@@ -1,58 +1,48 @@
-document.getElementById("getTitle").addEventListener("click", function (e) {
-  const button = this;
-  const titleCard = document.getElementById("titleCard");
-  const titleElement = document.getElementById("title");
+// Get references to DOM elements
+const likeCountInput = document.getElementById('likeCount');
+const commentCountInput = document.getElementById('commentCount');
+const startButton = document.getElementById('startButton');
 
-  // Add loading state
-  button.classList.add("loading");
-  button.textContent = "Fetching...";
-
-  // Create sparkle effect
-  createSparkles(e);
-
-  // Simulate slight delay for animation effect
-  setTimeout(() => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      if (tabs.length > 0) {
-        titleElement.textContent = tabs[0].title;
-        titleCard.classList.remove("show");
-        // Force reflow to restart animation
-        void titleCard.offsetWidth;
-        titleCard.classList.add("show");
-      } else {
-        titleElement.textContent = "No active tab found.";
-        titleCard.classList.add("show");
-      }
-
-      // Remove loading state
-      button.classList.remove("loading");
-      button.textContent = "Get Tab Title";
-    });
-  }, 300);
-});
-
-function createSparkles(e) {
-  const button = e.currentTarget;
-  const rect = button.getBoundingClientRect();
-
-  for (let i = 0; i < 8; i++) {
-    const sparkle = document.createElement('div');
-    sparkle.className = 'sparkle';
-
-    const angle = (Math.PI * 2 * i) / 8;
-    const distance = 30 + Math.random() * 20;
-    const tx = Math.cos(angle) * distance;
-    const ty = Math.sin(angle) * distance;
-
-    sparkle.style.cssText = `
-      left: ${e.clientX - rect.left}px;
-      top: ${e.clientY - rect.top}px;
-      --tx: ${tx}px;
-      --ty: ${ty}px;
-    `;
-
-    button.appendChild(sparkle);
-
-    setTimeout(() => sparkle.remove(), 1000);
+// Enable/disable button based on input values
+function updateButtonState() {
+  const likeCount = parseInt(likeCountInput.value) || 0;
+  const commentCount = parseInt(commentCountInput.value) || 0;
+  
+  // Enable button only if at least one input has a value greater than 0
+  if (likeCount > 0 || commentCount > 0) {
+    startButton.disabled = false;
+  } else {
+    startButton.disabled = true;
   }
 }
+
+// Add event listeners to inputs
+likeCountInput.addEventListener('input', updateButtonState);
+commentCountInput.addEventListener('input', updateButtonState);
+
+// Handle button click
+startButton.addEventListener('click', function() {
+  const likeCount = parseInt(likeCountInput.value) || 0;
+  const commentCount = parseInt(commentCountInput.value) || 0;
+  
+  // Open LinkedIn feed and send message to content script
+  chrome.tabs.create({ url: 'https://www.linkedin.com/feed/' }, function(tab) {
+    // Wait for the tab to load
+    chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+      if (tabId === tab.id && changeInfo.status === 'complete') {
+        // Remove the listener
+        chrome.tabs.onUpdated.removeListener(listener);
+        
+        // Send message to content script
+        chrome.tabs.sendMessage(tab.id, {
+          action: 'startAutomation',
+          likeCount: likeCount,
+          commentCount: commentCount
+        });
+        
+        // Close the popup
+        window.close();
+      }
+    });
+  });
+});
