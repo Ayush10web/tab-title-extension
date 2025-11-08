@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Automation History</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        body {
+            font-family: Inter, system-ui, "Segoe UI", Roboto, Arial;
+            padding: 18px;
+            max-width: 1100px
+        }
+
+        h1 {
+            margin: 0 0 12px 0
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap
+        }
+
+        input[type="search"] {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            min-width: 220px
+        }
+
+        button {
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: none;
+            background: #0b66c3;
+            color: #fff;
+            cursor: pointer
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ddd
+        }
+
+        .run {
+            border: 1px solid #e6e6e6;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            background: #fff
+        }
+
+        .meta {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .post {
+            padding: 8px;
+            border-radius: 8px;
+            background: #fbfdff;
+            margin-bottom: 6px
+        }
+
+        details summary {
+            cursor: pointer;
+            font-weight: 600
+        }
+
+        .small {
+            font-size: 13px;
+            color: #666
+        }
+
+        .toolbar-right {
+            margin-left: auto;
+            display: flex;
+            gap: 8px
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        td,
+        th {
+            border: 1px solid #eee;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Automation History</h1>
+
+    <div class="controls">
+        <input id="search" type="search" placeholder="Search author, text, or url" />
+        <select id="filterType">
+            <option value="all">All</option>
+            <option value="liked">Liked</option>
+            <option value="commented">Commented</option>
+        </select>
+        <select id="pageSize">
+            <option value="10">10 per page</option>
+            <option value="25" selected>25 per page</option>
+            <option value="50">50 per page</option>
+        </select>
+        <div class="toolbar-right" style="margin-left:auto">
+            <button id="exportCSV">Export CSV</button>
+            <button id="clearHistory" style="background:#c62828">Clear History</button>
+        </div>
+    </div>
+
+    <div id="historyContainer">Loading…</div>
+
+    <div style="margin-top:12px" class="small">History is stored locally in your browser (chrome.storage.local). You can
+        clear it at any time.</div>
+
+    <script src="history.js"></script>
+</body>
+
+</html>
