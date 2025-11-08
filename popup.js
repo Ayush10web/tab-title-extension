@@ -25,24 +25,45 @@ startButton.addEventListener('click', function() {
   const likeCount = parseInt(likeCountInput.value) || 0;
   const commentCount = parseInt(commentCountInput.value) || 0;
   
-  // Open LinkedIn feed and send message to content script
-  chrome.tabs.create({ url: 'https://www.linkedin.com/feed/' }, function(tab) {
-    // Wait for the tab to load
-    chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
-      if (tabId === tab.id && changeInfo.status === 'complete') {
-        // Remove the listener
-        chrome.tabs.onUpdated.removeListener(listener);
-        
-        // Send message to content script
-        chrome.tabs.sendMessage(tab.id, {
-          action: 'startAutomation',
-          likeCount: likeCount,
-          commentCount: commentCount
-        });
-        
-        // Close the popup
-      }
-    });
+    // Query for existing LinkedIn tabs or create a new one
+    chrome.tabs.query({ url: '*://*.linkedin.com/*' }, function(tabs) {
+        if (tabs.length > 0) {
+            // Use existing LinkedIn tab
+            const linkedInTab = tabs[0];
+            chrome.tabs.update(linkedInTab.id, { active: true, url: 'https://www.linkedin.com/feed/' });
+            
+            // Wait for tab to load and send message
+            chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+                if (tabId === linkedInTab.id && changeInfo.status === 'complete') {
+                    chrome.tabs.onUpdated.removeListener(listener);
+                    
+                    // Send message to content script
+                    chrome.tabs.sendMessage(linkedInTab.id, {
+                        action: 'startAutomation',
+                        likeCount: likeCount,
+                        commentCount: commentCount
+                    });
+                }
+            });
+        } else {
+            // Create new LinkedIn tab if none exists
+            chrome.tabs.create({ url: 'https://www.linkedin.com/feed/' }, function(tab) {
+                // Wait for the tab to load
+                chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+                    if (tabId === tab.id && changeInfo.status === 'complete') {
+                        chrome.tabs.onUpdated.removeListener(listener);
+                        
+                        // Send message to content script
+                        chrome.tabs.sendMessage(tab.id, {
+                            action: 'startAutomation',
+                            likeCount: likeCount,
+                            commentCount: commentCount
+                        });
+                    }
+                });
+            });
+        }
+    });    });
   });
 });
 
