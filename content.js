@@ -143,6 +143,13 @@ function displaySummary(likedPosts, commentedPosts) {
       notification.remove();
     }
   }, 30000);
+
+      // Send results to popup
+    chrome.runtime.sendMessage({
+        action: 'automationComplete',
+        likedPosts: likedPosts.map(p => p.author),
+        commentedPosts: commentedPosts.map(p => p.author)
+    });
 }
 
 function getRandomPosts(posts, count) {
