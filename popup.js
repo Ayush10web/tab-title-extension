@@ -64,8 +64,6 @@ startButton.addEventListener('click', function() {
             });
         }
     });    });
-  });
-});
 
 // Listen for results from content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
