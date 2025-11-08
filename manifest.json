@@ -1,10 +1,30 @@
 {
-  "permissions": ["tabs", "activeTab"],
-  "host_permissions": ["*://*.linkedin.com/*"],
+  "manifest_version": 3,
+  "name": "LinkedIn Auto Like & Comment (dev)",
+  "version": "1.0.0",
+  "description": "Automates liking and commenting on visible LinkedIn feed posts (for testing). Shows results and stores history.",
+  "action": {
+    "default_title": "Auto Like/Comment",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://www.linkedin.com/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["*://*.linkedin.com/feed/*"],
-      "js": ["content.js"]
+      "matches": [
+        "https://www.linkedin.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
     }
   ]
 }
