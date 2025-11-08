@@ -41,8 +41,34 @@ startButton.addEventListener('click', function() {
         });
         
         // Close the popup
-        window.close();
       }
     });
   });
+});
+
+// Listen for results from content script
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'automationComplete') {
+        // Show the results section
+        const resultsSection = document.getElementById('resultsSection');
+        resultsSection.style.display = 'block';
+        
+        // Display liked posts
+        const likedList = document.getElementById('likedList');
+        likedList.innerHTML = '';
+        request.likedPosts.forEach(author => {
+            const li = document.createElement('li');
+            li.textContent = author;
+            likedList.appendChild(li);
+        });
+        
+        // Display commented posts
+        const commentedList = document.getElementById('commentedList');
+        commentedList.innerHTML = '';
+        request.commentedPosts.forEach(author => {
+            const li = document.createElement('li');
+            li.textContent = author;
+            commentedList.appendChild(li);
+        });
+    }
 });
