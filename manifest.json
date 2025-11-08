@@ -1,17 +1,10 @@
 {
-  "manifest_version": 3,
-  "name": "Tab Title Extension",
-  "version": "1.0",
-  "description": "Shows the current tab's title in the popup.",
-  "permissions": ["tabs"],
-    "host_permissions": ["*://*.linkedin.com/*"],
+  "permissions": ["tabs", "activeTab"],
+  "host_permissions": ["*://*.linkedin.com/*"],
   "content_scripts": [
     {
       "matches": ["*://*.linkedin.com/feed/*"],
       "js": ["content.js"]
     }
-  ],
-  "action": {
-    "default_popup": "popup.html"
-  }
+  ]
 }
