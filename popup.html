@@ -372,9 +372,8 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
       </div>
-      <h1>Tab Title Viewer</h1>
-      <p>Click to reveal the current tab's title</p>
-    </div>
+            <h1>LinkedIn Automation Tool</h1>
+            <p>Automate likes and comments on LinkedIn posts</p>    </div>
     
         <div class="input-group">
           <label for="likeCount">Like Count:</label>
@@ -387,14 +386,21 @@
         </div>
 
         <button id="startButton" disabled>Start LinkedIn Automation</button>
-    <div id="titleCard">
-      <div class="label">Current Tab Title</div>
-      <div id="title"></div>
-    </div>
+    
+            <div id="resultsSection" style="display:none; margin-top: 20px;">
+                <h3>Automation Results</h3>
+                <div id="likedPosts">
+                    <h4>Liked Posts:</h4>
+                    <ul id="likedList"></ul>
+                </div>
+                <div id="commentedPosts">
+                    <h4>Commented Posts:</h4>
+                    <ul id="commentedList"></ul>
+                </div>
+            </div>
 
     <div class="footer">
-      Press the button to fetch title
-    </div>
+                Enter like and comment counts, then click the button    </div>
   </div>
 
   <script src="popup.js"></script>
